@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>webgl-go triangle demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autobahn/22.10.1/autobahn.min.js"
+        integrity="sha512-NV3SvHAZNmkfgYNYbooVfXPHOXSxozk0TJALPt9J2xk1cVwp0YnTw5k3W6IClirda/A9DspvjeBqxmgPvdus+w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <script src="/wasm_exec.js"></script>
+
+    <script>
+        if (!WebAssembly.instantiateStreaming) {
+            WebAssembly.instantiateStreaming = async (resp, importObject) => {
+                const source = await (await resp).arrayBuffer();
+                return await WebAssembly.instantiate(source, importObject);
+            };
+        }
+
+        const go = new Go();
+        let mod, inst;
+        WebAssembly.instantiateStreaming(fetch("/triangle.wasm"), go.importObject).then(
+            (result) => go.run(result.instance)
+        );
+    </script>
+
+    <canvas id="glcanvas" width="640" height="480"></canvas>
+</body>
+
+</html>

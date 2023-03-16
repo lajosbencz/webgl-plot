@@ -1,0 +1,14 @@
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/fortytw2/leaktest v1.3.0 h1:u8491cBMTQ8ft8aeV+adlcytMZylmA5nnwwkRZjI8vw=
+github.com/gammazero/nexus/v3 v3.2.0 h1:dKdGk4vQ/56wX5CLKUt6U3XQymUhTY6xHowBO9Z7bVA=
+github.com/gammazero/nexus/v3 v3.2.0/go.mod h1:h/5Osjg08QGAk+dVFpwdGdD8VsK+IGDm5E4PzVli264=
+github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
+github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/lajosbencz/netdata-dash v0.3.0 h1:OR6dvdDiHz6f7ioIj9XNuKRL7d6BNbZ5DgxrtLjxndE=
+github.com/lajosbencz/netdata-dash v0.3.0/go.mod h1:BBIAMH4mN+zQ86yKFGmhB+UuwAJob1F7UHLGORtNeqQ=
+github.com/seqsense/webgl-go v0.0.0-20220627023352-ef32d2a96714 h1:+ZanXmP454yTdAEnqOCueMzm1i1FTvr8KamUvb+9kwA=
+github.com/seqsense/webgl-go v0.0.0-20220627023352-ef32d2a96714/go.mod h1:0maLEllOLyHaTnNFVivXfh1zXII/kSrvwY8F2sVCu7s=
+github.com/ugorji/go/codec v1.2.11 h1:BMaWp1Bb6fHwEtbplGBGJ498wD+LKlNSl25MjdZY4dU=
+github.com/ugorji/go/codec v1.2.11/go.mod h1:UNopzCgEMSXjBc6AOMqYvWC1ktqTAfzJZUZgYf6w6lg=
+golang.org/x/crypto v0.7.0 h1:AvwMYaRytfdeVt3u6mLaxYtErKYjxA2OXjJ1HHq6t3A=
+golang.org/x/crypto v0.7.0/go.mod h1:pYwdfH91IfpZVANVyUOhSIPZaFoJGxTFbZhFTx+dXZU=
