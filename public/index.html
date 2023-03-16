@@ -8,27 +8,120 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/autobahn/22.10.1/autobahn.min.js"
         integrity="sha512-NV3SvHAZNmkfgYNYbooVfXPHOXSxozk0TJALPt9J2xk1cVwp0YnTw5k3W6IClirda/A9DspvjeBqxmgPvdus+w=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/wasm_exec.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body>
-    <script src="/wasm_exec.js"></script>
-
+    <div style="display: flex; flex-direction: column; align-items: start; min-height:100%; width:100%">
+        <canvas id="canvas_lines" width="640" height="360"></canvas>
+        <canvas id="canvas_triangle" width="640" height="360"></canvas>
+        <canvas id="canvas_wamptest" width="640" height="360"></canvas>
+        <canvas id="myCanvas" width="640" height="360"></canvas>
+    </div>
+    <script src="/index.js"></script>
     <script>
-        if (!WebAssembly.instantiateStreaming) {
-            WebAssembly.instantiateStreaming = async (resp, importObject) => {
-                const source = await (await resp).arrayBuffer();
-                return await WebAssembly.instantiate(source, importObject);
-            };
+        const fixCanvasSize = () => {
+            document.querySelectorAll('canvas[width]').forEach(c => {
+                const w = parseInt(c.parentNode.clientWidth)
+                if (!isNaN(w)) {
+                    c.setAttribute('width', w)
+                } else {
+                    console.log('NaN!', c.parentNode.clientWidth)
+                }
+            })
         }
-
-        const go = new Go();
-        let mod, inst;
-        WebAssembly.instantiateStreaming(fetch("/triangle.wasm"), go.importObject).then(
-            (result) => go.run(result.instance)
-        );
+        window.addEventListener('resize', () => {
+            fixCanvasSize()
+        })
+        fixCanvasSize()
     </script>
+    <script>
+            ; (() => {
+                const canvas = document.getElementById('myCanvas');
+                if (!canvas) {
+                    return
+                }
 
-    <canvas id="glcanvas" width="640" height="480"></canvas>
+                // Create a WebGL context
+                const gl = canvas.getContext('webgl');
+
+                // Define the positions of the vertices
+                const vertices = [
+                    0.0, 0.0,
+                    0.5, 0.5,
+                    0, -0.5,
+                    -1,-1,
+                ];
+
+                // Define the vertex shader
+                const vertexShaderSource = `
+  attribute vec2 aPosition;
+  void main() {
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+  }
+`;
+
+                // Compile the vertex shader
+                const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vertexShader, vertexShaderSource);
+                gl.compileShader(vertexShader);
+
+                // Define the fragment shader
+                const fragmentShaderSource = `
+  void main() {
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  }
+`;
+
+                // Compile the fragment shader
+                const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fragmentShader, fragmentShaderSource);
+                gl.compileShader(fragmentShader);
+
+                // Create a shader program and attach the shaders
+                const shaderProgram = gl.createProgram();
+                gl.attachShader(shaderProgram, vertexShader);
+                gl.attachShader(shaderProgram, fragmentShader);
+                gl.linkProgram(shaderProgram);
+
+                // Use the shader program
+                gl.useProgram(shaderProgram);
+
+                // Create a vertex buffer object
+                const vertexBuffer = gl.createBuffer();
+
+                // Bind the vertex buffer object
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
+                // Load the vertex data into the buffer
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+                // Enable the vertex attribute array
+                const aPosition = gl.getAttribLocation(shaderProgram, 'aPosition');
+                gl.enableVertexAttribArray(aPosition);
+
+                // Set the vertex attribute pointer
+                gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+
+                // Set the viewport and clear the canvas
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.clearColor(0.0, 0.0, 0.0, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+
+                // Draw the lines
+                gl.drawArrays(gl.LINES, 0, vertices.length / 2);
+            })();
+    </script>
 </body>
 
 </html>

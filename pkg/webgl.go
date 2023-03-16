@@ -15,6 +15,18 @@ const (
 	ALIASED_POINT_SIZE_RANGE = 0x846D
 )
 
+func NewCanvas(this js.Value, args []js.Value) (*webgl.WebGL, error) {
+	if len(args) < 1 || args[0].IsUndefined() || args[0].IsNull() {
+		return nil, fmt.Errorf("missing first argument: element")
+	}
+	canvas := args[0]
+	gl, err := webgl.New(canvas)
+	if err != nil {
+		return nil, err
+	}
+	return gl, nil
+}
+
 func InitVertexShader(gl *webgl.WebGL, src string) (webgl.Shader, error) {
 	s := gl.CreateShader(gl.VERTEX_SHADER)
 	gl.ShaderSource(s, src)
